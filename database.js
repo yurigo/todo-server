@@ -19,20 +19,60 @@ const db = new sqlite3.Database(DBSOURCE, (err) => {
   console.error(err);
 });
 
-function all(req, res) {
-  const sql = "select * from todos";
-  console.log(sql);
-  const params = [];
-  db.all(sql, params, (err, rows) => {
-    if (err) {
-      res.status(400).json({ error: err.message });
-      return;
-    }
-    console.log(rows);
-    res.json(
-      rows.map((row) => ({ ...row, text: row.todo, done: Boolean(row.done) }))
-    );
+function asyncAll() {
+  return new Promise((resolve, reject) => {
+    const sql = "select * from todos";
+    console.log(sql);
+    const params = [];
+
+    db.all(sql, params, (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(
+        rows.map((row) => ({ ...row, text: row.todo, done: Boolean(row.done) }))
+      );
+    });
   });
+}
+
+// function all(req, res) {
+//   const sql = "select * from todos";
+//   console.log(sql);
+//   const params = [];
+//   db.all(sql, params, (err, rows) => {
+//     if (err) {
+//       res.status(400).json({ error: err.message });
+//       return;
+//     }
+//     console.log(rows);
+//     res.json(
+//       rows.map((row) => ({ ...row, text: row.todo, done: Boolean(row.done) }))
+//     );
+//   });
+// }
+
+// new promise syntax:
+// function all(req, res) {
+//   asyncAll()
+//     .then((rows) => {
+//       res.json(rows);
+//     })
+//     .catch((err) => {
+//       res.status(500).json({ error: err });
+//     });
+// }
+
+// new async/await syntax:
+async function all(req, res) {
+  try {
+    const rows = await asyncAll();
+    res.json(rows);
+  } catch (ex) {
+    res.status(500).json({ error: err });
+  }
 }
 
 function item() {
