@@ -1,3 +1,5 @@
+```js
+
 const data = [
 { id: 1, text: "npm init", done: true },
 { id: 2, text: "npm i express", done: true },
@@ -5,21 +7,31 @@ const data = [
 { id: 4, text: "npm i cors", done: false },
 ];
 
-GET http://localhost:3000/todos/
+```
 
+## Obtener todos los *todo*
+```
+GET http://localhost:3000/todos/
+```
+
+## Añadir un *todo*
+```
 POST http://localhost:3000/todos/
 {
-{ text: "nuevo todo" }
+  text: "nuevo todo"
 }
+```
 
-PUT
-PATCH
-
-http://localhost:3000/todos/:ID
+## Modificar el estado de un todo
+```
+PUT http://localhost:3000/todos/:ID
 {
-{ done: true }
+  done: true
 }
+```
 
-DELETE
+## Borrado de un id
 
-http://localhost:3000/todos/:ID
+```
+DELETE http://localhost:3000/todos/:ID
+```
