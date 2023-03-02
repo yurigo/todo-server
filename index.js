@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { all, item, update, insert, remove } = require("./database");
+const { all, item, update, insert, remove } = require("./controller");
 
 const app = express();
 const port = 3000;
@@ -8,19 +8,11 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-app.get("/todos", (req, res) => {
-  all(req, res);
-});
-
-app.post("/todos", (req, res) => {
-  insert(req, res);
-});
-
-app.get("/todos/:id", (req, res) => {});
-
-app.put("/todos/:id", (req, res) => {});
-
-app.delete("/todos/:id", (req, res) => {});
+app.get("/todos", all);
+app.post("/todos", insert);
+app.delete("/todos/:id", remove);
+app.get("/todos/:id", item);
+app.put("/todos/:id", update);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
