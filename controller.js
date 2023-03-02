@@ -1,17 +1,23 @@
-const { asyncAll, asyncRemove } = require("./database.js");
+// const { asyncAll, asyncRemove, asyncItem } = require("./database.js");
+const db = require("./database.js");
 
 // new async/await syntax:
 async function all(req, res) {
   try {
-    const rows = await asyncAll();
+    const rows = await db.all();
     res.json(rows);
   } catch (ex) {
     res.status(500).json({ error: err });
   }
 }
 
-function item() {
-  return;
+async function item(req, res) {
+  try {
+    const row = await db.item(req.params.id);
+    res.json(row);
+  } catch (ex) {
+    res.status(500).json({ error: ex });
+  }
 }
 
 function insert(req, res) {
@@ -33,14 +39,38 @@ function insert(req, res) {
   //     });
   //   });
 }
+// PUT /todos/4587487
+// {
+//   done: true;
+// }
+async function update(req, res) {
+  try {
+    const { id } = req.params;
+    const { done } = req.body;
 
-function update() {
+    await db.update(id, done);
+    res.status(200).json({});
+  } catch (ex) {
+    res.status(500).json({ error: ex });
+  }
+
   return;
 }
 
 async function remove(req, res) {
   try {
-    await asyncRemove(req.params.id);
+    await db.remove(req.params.id);
+    res.status(200).json({});
+  } catch (ex) {
+    res.status(500).json({ error: ex });
+  }
+
+  return;
+}
+
+async function removeQString(req, res) {
+  try {
+    await db.remove(req.query.id);
     res.status(200).json({});
   } catch (ex) {
     res.status(500).json({ error: ex });
@@ -55,4 +85,5 @@ module.exports = {
   insert,
   update,
   remove,
+  removeQString,
 };

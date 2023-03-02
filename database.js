@@ -1,49 +1,67 @@
-const sqlite3 = require("sqlite3").verbose();
-
 const DBSOURCE = "./todos.sqlite";
 
-const db = new sqlite3.Database(DBSOURCE, (err) => {
-  console.error(err);
-});
+const betterSqlite3 = require("better-sqlite3");
+const db = betterSqlite3(DBSOURCE);
 
-function asyncAll() {
-  return new Promise((resolve, reject) => {
-    const sql = "select * from todos";
-    console.log(sql);
-    const params = [];
+function all() {
+  const stm = db.prepare("SELECT * FROM todos");
+  const rows = stm.all();
 
-    db.all(sql, params, (err, rows) => {
-      if (err) {
-        reject(err);
-        return;
-      }
+  const mappedRows = rows.map((elem) => {
+    // const x = {...elem}
 
-      resolve(
-        rows.map((row) => ({ ...row, text: row.todo, done: Boolean(row.done) }))
-      );
-    });
+    const nuevoElemento = {
+      id: elem.id,
+      todo: elem.todo,
+      done: Boolean(elem.done),
+    };
+    return nuevoElemento;
+
+    // return {
+    //   ...elem,
+    //   done: Boolean(elem.done)
+    // };
   });
+
+  // const mappedRows = rows;
+
+  return mappedRows;
 }
 
-function asyncRemove(id) {
-  return new Promise((resolve, reject) => {
-    const sql = "DELETE FROM todos WHERE ID = ?";
-    const params = [id];
+function item(id) {
+  const stm = db.prepare("SELECT * FROM todos WHERE id = ?");
+  const rows = stm.get(id);
+  return rows;
+}
 
-    db.run(sql, params, function (err) {
-      if (err) {
-        return reject(err);
-      }
+function update(id, done) {
+  // done es un boolean y en base de datos es un integer
 
-      resolve();
-    });
-  });
+  // if (done) {
+  //   done = 1;
+  // } else {
+  //   done = 0;
+  // }
+
+  // false = !!false;
+
+  const intDone = done ? 1 : 0;
+
+  const stm = db.prepare("UPDATE todos SET done = ? WHERE id = ?");
+  const rows = stm.run(intDone, id);
+  return rows;
+}
+
+function remove(id) {
+  const stm = db.prepare("DELETE FROM todos WHERE id = ?");
+  const rows = stm.run(id);
+  return rows;
 }
 
 module.exports = {
-  asyncAll,
+  all,
   // asyncInsert,
-  // asyncItem,
-  // asyncUpdate,
-  asyncRemove,
+  item,
+  update,
+  remove,
 };

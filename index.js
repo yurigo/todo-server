@@ -1,6 +1,13 @@
 const express = require("express");
 const cors = require("cors");
-const { all, item, update, insert, remove } = require("./controller");
+const {
+  all,
+  item,
+  update,
+  insert,
+  remove,
+  removeQString,
+} = require("./controller");
 
 const app = express();
 const port = 3000;
@@ -10,6 +17,7 @@ app.use(express.json());
 
 app.get("/todos", all);
 app.post("/todos", insert);
+// app.delete("/todos", removeQString);
 app.delete("/todos/:id", remove);
 app.get("/todos/:id", item);
 app.put("/todos/:id", update);
