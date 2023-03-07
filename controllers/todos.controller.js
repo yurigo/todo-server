@@ -1,5 +1,5 @@
 // const { asyncAll, asyncRemove, asyncItem } = require("./database.js");
-const db = require("./database.js");
+const db = require("../daos/todos.dao");
 
 // new async/await syntax:
 async function all(req, res) {
@@ -8,6 +8,17 @@ async function all(req, res) {
     res.json(rows);
   } catch (ex) {
     res.status(500).json({ error: err });
+  }
+}
+
+async function allTodosByUser(req, res, next) {
+  console.log("alltodosbyuser", req.USER_ID);
+  try {
+    const id = req.USER_ID;
+    const rows = await db.allTodosByUser(id);
+    res.json(rows);
+  } catch (ex) {
+    next(ex);
   }
 }
 
@@ -20,7 +31,7 @@ async function item(req, res) {
   }
 }
 
-function insert(req, res) {
+async function insert(req, res) {
   //   var sql = `INSERT INTO todos (todo, done) VALUES ( '${req.body.text}' , false);`;
   //   console.log(sql);
   //   var params = [];
@@ -38,6 +49,7 @@ function insert(req, res) {
   //       done: false,
   //     });
   //   });
+  res.json({});
 }
 // PUT /todos/4587487
 // {
@@ -81,9 +93,9 @@ async function removeQString(req, res) {
 
 module.exports = {
   all,
+  allTodosByUser,
   item,
   insert,
   update,
   remove,
-  removeQString,
 };

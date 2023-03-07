@@ -4,32 +4,14 @@ const betterSqlite3 = require("better-sqlite3");
 const db = betterSqlite3(DBSOURCE);
 
 function all() {
-  const stm = db.prepare("SELECT * FROM todos");
+  const stm = db.prepare("SELECT * FROM users");
   const rows = stm.all();
 
-  const mappedRows = rows.map((elem) => {
-    // const x = {...elem}
-
-    const nuevoElemento = {
-      id: elem.id,
-      todo: elem.todo,
-      done: Boolean(elem.done),
-    };
-    return nuevoElemento;
-
-    // return {
-    //   ...elem,
-    //   done: Boolean(elem.done)
-    // };
-  });
-
-  // const mappedRows = rows;
-
-  return mappedRows;
+  return rows;
 }
 
 function item(id) {
-  const stm = db.prepare("SELECT * FROM todos WHERE id = ?");
+  const stm = db.prepare("SELECT * FROM users WHERE id = ?");
   const rows = stm.get(id);
   return rows;
 }
