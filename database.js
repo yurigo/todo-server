@@ -34,19 +34,13 @@ function item(id) {
   return rows;
 }
 
+function insert(data) {
+  //
+}
+
 function update(id, done) {
   // done es un boolean y en base de datos es un integer
-
-  // if (done) {
-  //   done = 1;
-  // } else {
-  //   done = 0;
-  // }
-
-  // false = !!false;
-
   const intDone = done ? 1 : 0;
-
   const stm = db.prepare("UPDATE todos SET done = ? WHERE id = ?");
   const rows = stm.run(intDone, id);
   return rows;
@@ -60,7 +54,7 @@ function remove(id) {
 
 module.exports = {
   all,
-  // asyncInsert,
+  insert,
   item,
   update,
   remove,
