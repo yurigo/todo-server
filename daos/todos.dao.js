@@ -10,7 +10,7 @@ function all() {
 }
 
 function allTodosByUser(id) {
-  const stm = db.prepare("SELECT * FROM todos WHERE id_user = ?");
+  const stm = db.prepare("SELECT * FROM todos WHERE user_id = ?");
   const rows = stm.all(id);
   return transformarLaSalida(rows);
 }
@@ -19,17 +19,18 @@ function transformarLaSalida(rows) {
   const mappedRows = rows.map((elem) => {
     // const x = {...elem}
 
-    const nuevoElemento = {
-      id: elem.id,
-      todo: elem.todo,
-      done: Boolean(elem.done),
-    };
-    return nuevoElemento;
-
-    // return {
-    //   ...elem,
-    //   done: Boolean(elem.done)
+    // const nuevoElemento = {
+    //   id: elem.id,
+    //   todo: elem.todo,
+    //   done: Boolean(elem.done),
     // };
+    // return nuevoElemento;
+
+    return {
+      ...elem,
+      done: Boolean(elem.done),
+      text: `${ elem.title}, ${elem.description}`
+    };
   });
 
   // const mappedRows = rows;
