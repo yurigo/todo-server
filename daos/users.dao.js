@@ -16,8 +16,22 @@ function item(id) {
   return rows;
 }
 
+function getByUsername(username) {
+  const stm = db.prepare("SELECT * FROM users WHERE username = ?");
+  const userFound = stm.get(username);
+  return userFound;
+}
+
 function insert(data) {
   //
+  const stm = db.prepare(
+    "INSERT INTO users (username, password, name, email) VALUES (?,?,?,?)"
+  );
+
+  console.log(data);
+
+  const result = stm.run(data.username, data.password, data.name, data.email);
+  return result;
 }
 
 function update(id, done) {
@@ -38,6 +52,7 @@ module.exports = {
   all,
   insert,
   item,
+  getByUsername,
   update,
   remove,
 };
