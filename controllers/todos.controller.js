@@ -1,5 +1,6 @@
 // const { asyncAll, asyncRemove, asyncItem } = require("./database.js");
 const db = require("../daos/todos.dao");
+const tags = require("../daos/tags.dao");
 
 // new async/await syntax:
 async function all(req, res) {
@@ -16,6 +17,16 @@ async function allTodosByUser(req, res, next) {
   try {
     const id = req.USER_ID;
     const rows = await db.allTodosByUser(id);
+
+    // const tags_rows = tags.all();
+
+    // rows.map((row) => {
+    //   row.tags = tags_rows.filter((elem) => elem.todo_id === row.id);
+    //   return row;
+    // });
+
+    console.log(rows);
+
     res.json(rows);
   } catch (ex) {
     next(ex);
