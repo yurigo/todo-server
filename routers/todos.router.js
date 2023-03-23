@@ -11,6 +11,10 @@ const {
 const router = express.Router();
 // const router = express.Router({ mergeParams: true });
 
+const autorizacion = require("../middlewares/autorizacion_todos");
+
+router.use(autorizacion);
+
 router.get("/", allTodosByUser);
 router.get("/:id", item);
 router.post("/", insert);

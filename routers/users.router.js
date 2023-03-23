@@ -11,6 +11,9 @@ const router = express.Router();
 
 const todosRouter = require("./todos.router");
 
+const autenticacion = require("../middlewares/autenticacion");
+router.use(autenticacion);
+
 router.get("/", all);
 router.get("/:id", item);
 router.post("/", insert);
@@ -20,11 +23,8 @@ router.put("/:id", update);
 router.use("/:id_user/todos", todosRouter);
 
 router.param("id_user", (req, res, next, value) => {
-  req.USER_ID = value;
+  req.USER_ID = Number(value);
   next();
 });
-// router.use("/:id/todos", () => {
-//   console.log("x");
-// });
 
 module.exports = router;

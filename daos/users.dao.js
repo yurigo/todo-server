@@ -4,16 +4,25 @@ const betterSqlite3 = require("better-sqlite3");
 const db = betterSqlite3(DBSOURCE);
 
 function all() {
-  const stm = db.prepare("SELECT * FROM users");
+  const stm = db.prepare("SELECT id, username, name, email FROM users");
   const rows = stm.all();
 
   return rows;
 }
 
 function item(id) {
-  const stm = db.prepare("SELECT * FROM users WHERE id = ?");
-  const rows = stm.get(id);
-  return rows;
+  const stm = db.prepare(
+    "SELECT id, username, name, email FROM users WHERE id = ?"
+  );
+  const row = stm.get(id);
+
+  // return deletePasswordFromObject(row);
+  return row;
+}
+
+function deletePasswordFromObject(row) {
+  delete row.password;
+  return row;
 }
 
 function getByUsername(username) {

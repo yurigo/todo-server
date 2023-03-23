@@ -6,6 +6,8 @@ const cors = require("cors");
 const app = express();
 const port = 3000;
 
+const TTL_JWT = Number(process.env.TTL_JWT) ?? 10;
+
 app.use(cors());
 app.use(express.json());
 
@@ -53,12 +55,20 @@ app.post("/login", (req, res, next) => {
 
     // generar un token que voy a enviar a cliente.
     var jwt = require("jsonwebtoken");
-    var token = jwt.sign(
-      { id: userFound.id, name: userFound.name },
-      process.env.PASSWORD_JWT
-    );
+    try {
+      var token = jwt.sign(
+        {
+          id: userFound.id,
+          name: userFound.name,
+          exp: new Date() / 1000 + TTL_JWT,
+        },
+        process.env.PASSWORD_JWT
+      );
 
-    res.status(200).json({ token: token });
+      res.status(200).json({ token: token });
+    } catch (ex) {
+      console.log(ex);
+    }
   } else {
     // login incorrecto
     return next("login incorrecto");
