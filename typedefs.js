@@ -1,51 +1,29 @@
-// const typeDefs = `
-//     type Query {
-//         posts: [Post]
-//         post(id: ID!): Post
-//         users: [User]
-//         user(id: ID!): User
-//     }
+export const typeDefs = `
+    type Query {
+        hello: String
+        goodbye: String
 
-//     type Mutation {
-//         comment(post: Int!, user: Int!, comment: Int!): Comment
-//         user(name: String!, login: String!): User
-//         post(name: String!): Post
-//     }
+        users: [User]
+        user(id: ID!): User
+        todos: [Todo]
+        todo(id: ID!): Todo
+    }
 
-//     type Post {
-//         id: ID!
-//         image: String
-//         user: User
-//         comments: [Comment]
-//     }
 
-//     type User {
-//         id: ID!
-//         email: String
-//         name: String
-//         enam: String
-//         comments: [Comment]
-//         posts: [Post]
-//     }
+    type User {
+        id: ID!
+        username: String
+        name: String
+        email: String
+        todos: [Todo]
+    }
 
-//     type Comment {
-//         id: ID!
-//         idUser: Int,
-//         idPost: Int,
-//         idComment: Int,
-//         user: User
-//         post: Post
-//         replies: [Comment]
-//         contenido: String
-//     }
-// `;
-
-const typeDefs = `
-
-type Query {
-    hello: String
-}
+    type Todo {
+        id: ID!
+        user_id: ID
+        title: String
+        description: String
+        done: Boolean
+        user: User
+    }
 `;
-
-
-module.exports = typeDefs;

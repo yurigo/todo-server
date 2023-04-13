@@ -1,15 +1,25 @@
-const express = require("express");
-const {
+// const express = require("express");
+import express from "express"
+
+// const {
+//   all,
+//   item,
+//   update,
+//   insert,
+//   remove,
+// } = require("../controllers/users.controller");
+
+import {
   all,
   item,
   update,
   insert,
-  remove,
-} = require("../controllers/users.controller");
+  remove
+} from "../controllers/users.controller.js"
 
-const router = express.Router();
+export const router = express.Router();
 
-const todosRouter = require("./todos.router");
+// const todosRouter = require("./todos.router");
 
 router.get("/", all);
 router.get("/:id", item);
@@ -17,7 +27,7 @@ router.post("/", insert);
 router.delete("/:id", remove);
 router.put("/:id", update);
 
-router.use("/:id_user/todos", todosRouter);
+// router.use("/:id_user/todos", todosRouter);
 
 router.param("id_user", (req, res, next, value) => {
   req.USER_ID = value;
@@ -27,4 +37,4 @@ router.param("id_user", (req, res, next, value) => {
 //   console.log("x");
 // });
 
-module.exports = router;
+// module.exports = router;

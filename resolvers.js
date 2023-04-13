@@ -1,46 +1,24 @@
-// const PostsDAO = require("./dao/posts.dao");
-// const UsersDAO = require("./dao/users.dao");
-// const CommentsDAO = require("./dao/comments.dao");
 
-// const dao = {
-//     posts: new PostsDAO(),
-//     users: new UsersDAO(),
-//     comments: new CommentsDAO(),
-// };
+import { all as allUsers , item as getUser  } from "./daos/users.dao.js"
+import { all as allTodos , item as getTodo , allTodosByUser  } from "./daos/todos.dao.js"
 
-module.exports = {
-    // Query: {
-
-    //     posts: async (_, __, ___, ____) => {
-    //         // console.log('root', _)
-    //         // console.log('args', __)
-    //         // console.log('context', ___)
-    //         // console.log('info', ____)
-    //         return await dao.posts.all()
-    //     },
-    //     post: async (_, { id }) => await dao.posts.get(id),
-    //     users: async (_, __) => await dao.users.all(),
-    //     user: async (_, { id }) => await dao.users.get(id),
-    // },
-
-    // Post: {
-    //     comments: async ({ id }, __) => await dao.comments.getAllFromPost(id),
-    //     user: async ({ idUser }, _) => await dao.users.get(idUser),
-    // },
-
-    // User: {
-    //     enam: async ({ name }, _) => name.split("").reverse().join(""),
-    //     posts: async ({ id }, _) => await dao.posts.getAllFromUser(id),
-    //     comments: async ({ id }, _) => await dao.comments.getAllFromUser(id),
-    // },
-
-    // Comment: {
-    //     post: async ({ idPost }, _) => await dao.posts.get(idPost),
-    //     user: async ({ idUser }, _) => await dao.users.get(idUser),
-    //     replies: async ({ id }, _) => await dao.comments.getAllFromComment(id),
-    // },
-
+export const resolvers = {
     Query: {
-        hello: () => "Hello world!",
+        hello: () => "hello world",
+        goodbye: function() {
+            return "bye"
+        },
+        users: async () => await allUsers(),
+        user: async (_root, args) => await getUser(args.id),
+        todos: async () => await allTodos(),
+        todo: async (_, {id}) => await getTodo(id)
+    },
+
+    Todo: {
+        user: async (root) => await getUser(root.user_id),
+    },
+
+    User: {
+        todos: async (root) => await allTodosByUser(root.id),
     }
 };

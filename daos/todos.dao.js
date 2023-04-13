@@ -1,21 +1,23 @@
 const DBSOURCE = "./todos.sqlite";
 
-const betterSqlite3 = require("better-sqlite3");
+import betterSqlite3 from "better-sqlite3"
+
 const db = betterSqlite3(DBSOURCE);
 
-function all() {
+export function all() {
   const stm = db.prepare("SELECT * FROM todos");
   const rows = stm.all();
   return transformarLaSalida(rows);
 }
 
-function allTodosByUser(id) {
+export function allTodosByUser(id) {
   const stm = db.prepare("SELECT * FROM todos WHERE user_id = ?");
   const rows = stm.all(id);
   return transformarLaSalida(rows);
 }
 
-function transformarLaSalida(rows) {
+export function transformarLaSalida(rows) {
+  return rows;
   const mappedRows = rows.map((elem) => {
     // const x = {...elem}
 
@@ -31,6 +33,8 @@ function transformarLaSalida(rows) {
       done: Boolean(elem.done),
       text: `${ elem.title}, ${elem.description}`
     };
+
+    return elem
   });
 
   // const mappedRows = rows;
@@ -38,18 +42,18 @@ function transformarLaSalida(rows) {
   return mappedRows;
 }
 
-function item(id) {
+export function item(id) {
   const stm = db.prepare("SELECT * FROM todos WHERE id = ?");
   const row = stm.get(id);
 
   return transformarLaSalida([row])[0];
 }
 
-function insert(data) {
+export function insert(data) {
   //
 }
 
-function update(id, done) {
+export function update(id, done) {
   // done es un boolean y en base de datos es un integer
   const intDone = done ? 1 : 0;
   const stm = db.prepare("UPDATE todos SET done = ? WHERE id = ?");
@@ -57,17 +61,8 @@ function update(id, done) {
   return rows;
 }
 
-function remove(id) {
+export function remove(id) {
   const stm = db.prepare("DELETE FROM todos WHERE id = ?");
   const rows = stm.run(id);
   return rows;
 }
-
-module.exports = {
-  all,
-  allTodosByUser,
-  insert,
-  item,
-  update,
-  remove,
-};
